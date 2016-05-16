@@ -1,0 +1,190 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_MyRHELVM_adminPassword": {
+            "defaultValue": null,
+            "type": "SecureString"
+        },
+        "virtualMachines_MyRHELVM_name": {
+            "defaultValue": "MyRHELVM",
+            "type": "String"
+        },
+        "networkInterfaces_myVMNic_name": {
+            "defaultValue": "myVMNic",
+            "type": "String"
+        },
+        "publicIPAddresses_myPublicIP_name": {
+            "defaultValue": "myPublicIP",
+            "type": "String"
+        },
+        "virtualNetworks_MyVNET_name": {
+            "defaultValue": "MyVNET",
+            "type": "String"
+        },
+        "storageAccounts_kli4bq4dwtw5irhelvm_name": {
+            "defaultValue": "kli4bq4dwtw5irhelvm",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions/68c38d72-7104-4ae5-b27e-14b24416c065/resourceGroups/armtest/providers/Microsoft.Compute/virtualMachines/MyRHELVM'.",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('virtualMachines_MyRHELVM_name')]",
+            "apiVersion": "2015-06-15",
+            "location": "northeurope",
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_D1"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "RedHat",
+                        "offer": "RHEL",
+                        "sku": "7.2",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "osdisk",
+                        "createOption": "FromImage",
+                        "vhd": {
+                            "uri": "[concat('http', '://', parameters('storageAccounts_kli4bq4dwtw5irhelvm_name'), '.blob.core.windows.net', '/vhds/osdiskforrhelsimple.vhd')]"
+                        },
+                        "caching": "ReadWrite"
+                    },
+                    "dataDisks": [
+                        {
+                            "lun": 0,
+                            "name": "datadisk1",
+                            "createOption": "Empty",
+                            "vhd": {
+                                "uri": "[concat('http', '://', parameters('storageAccounts_kli4bq4dwtw5irhelvm_name'), '.blob.core.windows.net', '/vhds/datadisk1.vhd')]"
+                            },
+                            "caching": "None",
+                            "diskSizeGB": 100
+                        }
+                    ]
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_MyRHELVM_name')]",
+                    "adminUsername": "andrew",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false
+                    },
+                    "secrets": [],
+                    "adminPassword": "[parameters('virtualMachines_MyRHELVM_adminPassword')]"
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_myVMNic_name'))]"
+                        }
+                    ]
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_kli4bq4dwtw5irhelvm_name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_myVMNic_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/68c38d72-7104-4ae5-b27e-14b24416c065/resourceGroups/armtest/providers/Microsoft.Network/networkInterfaces/myVMNic'.",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('networkInterfaces_myVMNic_name')]",
+            "apiVersion": "2015-06-15",
+            "location": "northeurope",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAddress": "10.0.0.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_myPublicIP_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_MyVNET_name')), '/subnets/Subnet')]"
+                            }
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableIPForwarding": false
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_myPublicIP_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_MyVNET_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/68c38d72-7104-4ae5-b27e-14b24416c065/resourceGroups/armtest/providers/Microsoft.Network/publicIPAddresses/myPublicIP'.",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[parameters('publicIPAddresses_myPublicIP_name')]",
+            "apiVersion": "2015-06-15",
+            "location": "northeurope",
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/68c38d72-7104-4ae5-b27e-14b24416c065/resourceGroups/armtest/providers/Microsoft.Network/virtualNetworks/MyVNET'.",
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[parameters('virtualNetworks_MyVNET_name')]",
+            "apiVersion": "2015-06-15",
+            "location": "northeurope",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "Subnet",
+                        "properties": {
+                            "addressPrefix": "10.0.0.0/24"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/68c38d72-7104-4ae5-b27e-14b24416c065/resourceGroups/armtest/providers/Microsoft.Storage/storageAccounts/kli4bq4dwtw5irhelvm'.",
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[parameters('storageAccounts_kli4bq4dwtw5irhelvm_name')]",
+            "apiVersion": "2015-06-15",
+            "location": "northeurope",
+            "tags": {},
+            "properties": {
+                "accountType": "Standard_LRS"
+            },
+            "dependsOn": []
+        }
+		
+		{
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('virtualMachines_MyRHELVM_name'), '/azureVmUtils')]",
+            "apiVersion": "2015-06-15",
+            "location": "northeurope",
+            "properties": {
+                "publisher": "Microsoft.OSTCExtensions",
+                "type": "CustomScriptForLinux",
+                "typeHandlerVersion": "1.4",
+                "settings": {
+                    "fileUris": [
+                        "https://raw.githubusercontent.com/masterbacon/azure/master/CustomScript4Extension.sh"
+                    ],
+                    "commandToExecute": "bash CustomScript4Extension.sh"
+                }
+            }
+        }
+    ]
+}
