@@ -185,7 +185,7 @@
 		"properties": {
 			"publisher": "Microsoft.OSTCExtensions",
 			"type": "CustomScriptForLinux",
-			"typeHandlerVersion": "1.4",
+			"typeHandlerVersion": "1.5",
 			"settings": {
 				"fileUris": [
 					"https://raw.githubusercontent.com/masterbacon/azure/master/CustomScript4Extension.sh"
