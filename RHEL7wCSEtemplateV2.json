@@ -176,12 +176,12 @@
     },
 	{
 		"type": "Microsoft.Compute/virtualMachines/extensions",
-		"name": "[concat(variables('vmName'), '/azureVmUtils')]",
+		"name": "[concat(variables('vmName'), '/CustomScriptForLinux')]",
 		"apiVersion": "2015-06-15",
 		"location": "northeurope",
 		"dependsOn": [
 			"[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
-		],
+        	],
 		"properties": {
 			"publisher": "Microsoft.OSTCExtensions",
 			"type": "CustomScriptForLinux",
