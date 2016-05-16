@@ -8,3 +8,5 @@ firewall-cmd --permanent --add-port=8080/tcp
 firewall-cmd --permanent --add-service=http
 firewall-cmd --reload
 firewall-cmd --list-all
+
+systemctl restart tomcat
