@@ -162,8 +162,7 @@
                 "accountType": "Standard_LRS"
             },
             "dependsOn": []
-        }
-		
+        },
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('virtualMachines_MyRHELVM_name'), '/azureVmUtils')]",
