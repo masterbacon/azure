@@ -11,5 +11,6 @@ gpgcheck=1
 gpgkey=https://yum.dockerproject.org/gpg
 EOF
 yum -y install docker-engine
+systemctl enable docker
 service docker start
 systemctl status docker
