@@ -13,6 +13,3 @@ EOF
 yum -y install docker-engine
 service docker start
 service docker status
-
-ls -l /var/log/azure/Microsoft.OSTCExtensions.CustomScriptForLinux/1.5.2.0/
-sudo ls -l /var/log/azure/Microsoft.OSTCExtensions.CustomScriptForLinux/1.5.2.0/
