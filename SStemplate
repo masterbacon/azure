@@ -1,0 +1,195 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_SSTESTVM_adminPassword": {
+            "defaultValue": null,
+            "type": "SecureString"
+        },
+        "virtualMachines_SSTESTVM_name": {
+            "defaultValue": "SSTESTVM",
+            "type": "String"
+        },
+        "networkInterfaces_sstestvm391_name": {
+            "defaultValue": "sstestvm391",
+            "type": "String"
+        },
+        "networkSecurityGroups_SSTESTVM_name": {
+            "defaultValue": "SSTESTVM",
+            "type": "String"
+        },
+        "publicIPAddresses_SSTESTVM_name": {
+            "defaultValue": "SSTESTVM",
+            "type": "String"
+        },
+        "virtualNetworks_SSnetwork_name": {
+            "defaultValue": "SSnetwork",
+            "type": "String"
+        },
+        "storageAccounts_sksstoremay2016_name": {
+            "defaultValue": "sksstoremay2016",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions/6e61acf8-1a7d-4d34-ab8d-6add646caf9b/resourceGroups/SS/providers/Microsoft.Compute/virtualMachines/SSTESTVM'.",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('virtualMachines_SSTESTVM_name')]",
+            "apiVersion": "2015-06-15",
+            "location": "westeurope",
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_D2_v2"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2012-R2-Datacenter",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "[parameters('virtualMachines_SSTESTVM_name')]",
+                        "createOption": "FromImage",
+                        "vhd": {
+                            "uri": "[concat('https', '://', parameters('storageAccounts_sksstoremay2016_name'), '.blob.core.windows.net', concat('/vhds/', parameters('virtualMachines_SSTESTVM_name'),'2016417112524.vhd'))]"
+                        },
+                        "caching": "ReadWrite"
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_SSTESTVM_name')]",
+                    "adminUsername": "ssadmin",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true
+                    },
+                    "secrets": [],
+                    "adminPassword": "[parameters('virtualMachines_SSTESTVM_adminPassword')]"
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_sstestvm391_name'))]"
+                        }
+                    ]
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sksstoremay2016_name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_sstestvm391_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/6e61acf8-1a7d-4d34-ab8d-6add646caf9b/resourceGroups/SS/providers/Microsoft.Network/networkInterfaces/sstestvm391'.",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('networkInterfaces_sstestvm391_name')]",
+            "apiVersion": "2015-06-15",
+            "location": "westeurope",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAddress": "10.4.0.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SSTESTVM_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SSnetwork_name')), '/subnets/default')]"
+                            }
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableIPForwarding": false,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SSTESTVM_name'))]"
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_SSTESTVM_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_SSnetwork_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_SSTESTVM_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/6e61acf8-1a7d-4d34-ab8d-6add646caf9b/resourceGroups/SS/providers/Microsoft.Network/networkSecurityGroups/SSTESTVM'.",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('networkSecurityGroups_SSTESTVM_name')]",
+            "apiVersion": "2015-06-15",
+            "location": "westeurope",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "default-allow-rdp",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "3389",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 1000,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/6e61acf8-1a7d-4d34-ab8d-6add646caf9b/resourceGroups/SS/providers/Microsoft.Network/publicIPAddresses/SSTESTVM'.",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[parameters('publicIPAddresses_SSTESTVM_name')]",
+            "apiVersion": "2015-06-15",
+            "location": "westeurope",
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/6e61acf8-1a7d-4d34-ab8d-6add646caf9b/resourceGroups/SS/providers/Microsoft.Network/virtualNetworks/SSnetwork'.",
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[parameters('virtualNetworks_SSnetwork_name')]",
+            "apiVersion": "2015-06-15",
+            "location": "westeurope",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.4.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "default",
+                        "properties": {
+                            "addressPrefix": "10.4.0.0/24"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/6e61acf8-1a7d-4d34-ab8d-6add646caf9b/resourceGroups/ss/providers/Microsoft.Storage/storageAccounts/sksstoremay2016'.",
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[parameters('storageAccounts_sksstoremay2016_name')]",
+            "apiVersion": "2015-06-15",
+            "location": "westeurope",
+            "tags": {},
+            "properties": {
+                "accountType": "Standard_LRS"
+            },
+            "dependsOn": []
+        }
+    ]
+}
