@@ -27,7 +27,7 @@
             "type": "String"
         },
         "storageAccounts_sksstoremay2016_name": {
-            "defaultValue": "sksstoremay2016",
+            "defaultValue": "sksstoremay2016awb",
             "type": "String"
         }
     },
