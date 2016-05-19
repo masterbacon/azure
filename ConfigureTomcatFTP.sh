@@ -24,6 +24,6 @@ systemctl status tomcat
 #Disable SElinux
 setenforce 0
 #Prevent SElinux running on reboot
-sed -i -- 's/SELINUX=enforcing/SELINUX=permissive/g' here.cfg
+sed -i -- 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
 
 chmod a+w /var/lib/tomcat/webapps
