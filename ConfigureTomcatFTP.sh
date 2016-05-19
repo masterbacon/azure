@@ -20,3 +20,5 @@ systemctl restart tomcat
 systemctl status tomcat
 
 setenforce 0
+
+chmod a+w /var/lib/tomcat/webapps
