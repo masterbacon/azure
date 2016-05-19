@@ -13,12 +13,17 @@ yum -y install tomcat-webapps
 yum -y install tomcat-admin-webapps
 yum -y install vsftpd
 
+systemctl enable vsftpd 
 service vsftpd start
 service vsftpd status
 
+systemctl enable tomcat
 systemctl restart tomcat
 systemctl status tomcat
 
+#Disable SElinux
 setenforce 0
+#Prevent SElinux running on reboot
+sed -i -- 's/SELINUX=enforcing/SELINUX=permissive/g' here.cfg
 
 chmod a+w /var/lib/tomcat/webapps
