@@ -43,7 +43,7 @@
     "vmStorageAccountContainerName": "vhds",
     "vmName": "azdv-grp-dopsv1",
     "vmSize": "Standard_D1",
-    "virtualNetworkName": "NetAzurePass",
+    "virtualNetworkName": "Net-AzurePass",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
     "apiVersion": "2015-06-15"
