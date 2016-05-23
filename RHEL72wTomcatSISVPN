@@ -157,7 +157,7 @@
 		"type": "Microsoft.Compute/virtualMachines/extensions",
 		"name": "[concat(variables('vmName'), '/CustomScriptForLinux')]",
 		"apiVersion": "2015-06-15",
-		"location": "northeurope",
+		"location": "[variables('location')]",
 		"dependsOn": [
 			"[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
         	],
