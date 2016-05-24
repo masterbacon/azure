@@ -2,18 +2,12 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
-    "storageAccountName": "awbdevsa",
-    "storageAccountType": "Standard_LRS",
-    "location": "[resourceGroup().location]",
-    "addressPrefix": "10.74.0.0/16",
-    "virtualNetworkName": "awb-dev-vnet",
-    "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
-    "apiVersion": "2015-06-15"
+    "sharedTemplateUrl": "[uri(deployment().properties.templateLink.uri, 'awb-dev-shared-template.json')]"
   },
   "resources": [
     { 
      "apiVersion": "2015-01-01", 
-     "name": "nestedTemplate", 
+     "name": "sharedDevTemplate", 
      "type": "Microsoft.Resources/deployments", 
      "properties": { 
        "mode": "incremental", 
@@ -25,22 +19,22 @@
     },
     {
       "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('storageAccountName')]",
-      "apiVersion": "[variables('apiVersion')]",
-      "location": "[variables('location')]",
+      "name": "[reference('sharedDevTemplate').outputs.storageAccountName.value]",
+      "apiVersion": "[reference('sharedDevTemplate').outputs.apiVersion.value]",
+      "location": "[reference('sharedDevTemplate').outputs.location.value]",
       "properties": {
-        "accountType": "[variables('storageAccountType')]"
+        "accountType": "[reference('sharedDevTemplate').outputs.storageAccountType.value]"
       }
     },
     {
-      "apiVersion": "[variables('apiVersion')]",
+      "apiVersion": "[reference('sharedDevTemplate').outputs.apiVersion.value]",
       "type": "Microsoft.Network/virtualNetworks",
-      "name": "[variables('virtualNetworkName')]",
-      "location": "[variables('location')]",
+      "name": "[reference('sharedDevTemplate').outputs.virtualNetworkName.value]",
+      "location": "[reference('sharedDevTemplate').outputs.location.value]",
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
-            "[variables('addressPrefix')]"
+            "[reference('sharedDevTemplate').outputs.addressPrefix.value]"
           ]
         }
       }
