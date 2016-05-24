@@ -5,6 +5,18 @@
     "sharedTemplateUrl": "[uri(deployment().properties.templateLink.uri, 'awb-dev-shared-template.json')]"
   },
   "resources": [
+    { 
+     "apiVersion": "2015-01-01", 
+     "name": "nestedTemplate", 
+     "type": "Microsoft.Resources/deployments", 
+     "properties": { 
+       "mode": "incremental", 
+       "templateLink": {
+          "uri": "[variables('sharedTemplateUrl')]",
+          "contentVersion": "1.0.0.0"
+       }
+     } 
+    },
     {
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('storageAccountName')]",
