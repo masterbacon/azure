@@ -1,0 +1,46 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "location": "[resourceGroup().location]",
+    "vmSubnetName": "Subnet",
+    "vmSubnetPrefix": "10.0.0.0/24",
+    "vmSubnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
+    "apiVersion": "2015-06-15"
+  },
+  "resources": [
+    { 
+     "apiVersion": "2015-01-01", 
+     "name": "nestedTemplate", 
+     "type": "Microsoft.Resources/deployments", 
+     "properties": { 
+       "mode": "incremental", 
+       "templateLink": {
+          "uri": "https://raw.githubusercontent.com/masterbacon/azure/master/awb-dev-base-template.json",
+          "contentVersion": "1.0.0.0"
+       }
+     } 
+    }, 
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.Network/virtualNetworks",
+      "name": "[variables('virtualNetworkName')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('addressPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('vmSubnetName')]",
+            "properties": {
+              "addressPrefix": "[variables('vmSubnetPrefix')]"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
