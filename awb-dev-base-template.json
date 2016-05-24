@@ -2,7 +2,13 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
-    "sharedTemplateUrl": "[uri(deployment().properties.templateLink.uri, 'awb-dev-shared-template.json')]"
+    "storageAccountName": "awbdevsa",
+    "storageAccountType": "Standard_LRS",
+    "location": "[resourceGroup().location]",
+    "addressPrefix": "10.74.0.0/16",
+    "virtualNetworkName": "awb-dev-vnet",
+    "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
+    "apiVersion": "2015-06-15"
   },
   "resources": [
     { 
