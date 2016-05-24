@@ -29,10 +29,10 @@
   "variables": {
     "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'rhelvm')]",
     "location": "[resourceGroup().location]",
-    "dataDisk1VhdName": "datadisk1",
+    "dataDisk1VhdName": "datadisk1docker",
     "imagePublisher": "RedHat",
     "imageOffer": "RHEL",
-    "OSDiskName": "osdiskforrhelsimple",
+    "OSDiskName": "osdiskforrhelsimpledocker",
     "nicName": "azdv-grp-dopsv2nic",
     "addressPrefix": "10.73.0.0/16",
     "subnetName": "Sub-PoC-1",
