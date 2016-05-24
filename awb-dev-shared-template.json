@@ -9,5 +9,35 @@
     "virtualNetworkName": "awb-dev-vnet",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
     "apiVersion": "2015-06-15"
+  },
+  "outputs": {
+    "storageAccountName": {
+        "value": "[variables('storageAccountName')]",
+        "type": "string"
+     },
+    "storageAccountType": {
+        "value": "[variables('storageAccountType')]",
+        "type": "string"
+     },
+    "location": {
+        "value": "[variables('location')]",
+        "type": "string"
+     },
+    "addressPrefix": {
+        "value": "[variables('addressPrefix')]",
+        "type": "string"
+     },
+    "virtualNetworkName": {
+        "value": "[variables('virtualNetworkName')]",
+        "type": "string"
+     },
+    "vnetID": {
+        "value": "[variables('vnetID')]",
+        "type": "string"
+     },
+    "apiVersion": {
+        "value": "[variables('apiVersion')]",
+        "type": "string"
+     }
   }
 }
