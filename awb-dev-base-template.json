@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "variables": {
     "sharedTemplateUrl": "[uri(deployment().properties.templateLink.uri, 'awb-dev-shared-template.json')]"
-  }
+  },
   "resources": [
     {
       "type": "Microsoft.Storage/storageAccounts",
